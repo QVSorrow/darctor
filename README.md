@@ -1,15 +1,34 @@
-A library for Dart developers.
+# WORK IN PROGRESS
+
+# Darctor - Actor library for Dart.
 
 ## Usage
 
-A simple usage example:
+A simple usage example with 2 actors - printer and sender:
 
 ```dart
 import 'package:darctor/darctor.dart';
 
-main() {
-  var awesome = new Awesome();
+final printerBehavior =
+Behaviors.receive<String>((context, message) => print(message));
+
+Behavior<String> senderBehavior(ActorRef<String> sendTo) =>
+    Behaviors.setup((context) async {
+      for (var i = 0; i < 10; i++) {
+        await Future.delayed(Duration(milliseconds: 200));
+        sendTo.tell('Number: $i');
+      }
+    });
+
+void main() {
+  var system = actorSystemOf(
+      name: 'root',
+      guardian: Behaviors.setup((context) {
+        final printer = context.spawn('printer', printerBehavior);
+        context.spawn('sender', senderBehavior(printer));
+      }));
 }
+
 ```
 
 ## Features and bugs
