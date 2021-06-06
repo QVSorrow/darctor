@@ -7,18 +7,6 @@ import 'package:darctor/src/impl/actor.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('A group of tests', () {
-    final awesome = Awesome();
-
-    setUp(() {
-      // Additional setup goes here.
-    });
-
-    test('First Test', () {
-      expect(awesome.isAwesome, isTrue);
-    });
-  });
-
   test('ping-pong', () async {
     actorSystemOf(name: 'ping-pong', guardian: Behaviors.setup((context) async {
       final ping = context.spawn('ping', pingPong);
